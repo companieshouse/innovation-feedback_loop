@@ -42,9 +42,11 @@ global.db.on('open', function() {
 
 //routes
 const feedbackRoutes = require('./src/js/feedback/feedbackRoutes');
+const oopsRoutes = require('./src/js/oops/oopsRoutes');
 const successRoutes = require('./src/js/success/successRoutes');
 
 app.use('/', feedbackRoutes);
+app.use('/oops', oopsRoutes);
 app.use('/success', successRoutes);
 
 app.listen(3000, () => {
