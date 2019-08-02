@@ -1,0 +1,59 @@
+extends layout
+
+block content
+    div(class='page-header pt-4 pb-3')
+        div(class='row')
+            div(class='col-lg-12')
+                h4 Please enter any feedback you have using the form below
+
+
+    form(class='form-horizontal' method='POST', action='/' role='form')
+        div(class='form-group form-row')
+                div(class='col-sm-1')
+                    label(class='control-label text-left' for='name') Name:
+                div(class='col-sm-6')
+                    input#name(class='form-control custom-form-control' type='text', placeholder='Enter name here', name='name' value=undefined===name ? '' : name)
+                
+                div(class='col-sm-4 text-left')
+                    if errors !== undefined
+                        each error in errors
+                            if error.param == 'name'
+                                p(id='error-name' class='text-danger')= error.msg
+
+        div(class='form-group form-row')
+                div(class='col-sm-1')
+                    label(for='directorate' class='control-label text-left') Directorate: 
+                div(class='col-sm-6')
+                    select#directorate(class='form-control custom-form-control' name='directorate')
+                        option(value='' disabled selected hidden)= "Choose the Directorate you belong to"
+                        option(value='People Transformation' selected= directorate == 'People Transformation')= "People Transformation"
+                        option(value='Customer Delivery Group' selected= directorate == 'Customer Delivery Group')= "Customer Delivery Group"
+                        option(value='Finance' selected= directorate == 'Finance')= "Finance"
+                        option(value='Digital Services Group' selected= directorate == 'Digital Services Group')= "Digital Services Group"
+                        option(value='Strategy and Policy' selected= directorate == 'Strategy and Policy')= "Strategy and Policy"
+                
+                div(class='col-sm-4 text-left')
+                    if errors !== undefined
+                        each error in errors
+                            if error.param == 'directorate'
+                                p(id='error-directorate' class='text-danger')= error.msg
+
+
+        div(class='form-group form-row align-items-center')
+                label(for='feedback' class='control-label col-sm-1 text-left') Feedback:
+                div(class='col-sm-6')
+                    textarea#feedback(class='form-control custom-form-control' rows=6 name='feedback' placeholder='Enter feedback here')= feedback
+                
+                div(class='col-sm-4 text-left')
+                    if errors !== undefined
+                        each error in errors
+                            if error.param == 'feedback'
+                                p(id='error-feedback' class='text-danger')= error.msg
+
+        div(class='form-group form-row align-items-center')
+                div(class='col-sm-1')
+                div(class='col-sm-2')
+                    button(class='btn btn-primary' type='submit') Send feedback
+
+    script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js' integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo' crossorigin='anonymous')
+    script(src='/js/validation/feedbackValidation.js')
