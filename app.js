@@ -3,12 +3,12 @@ const path = require('path');
 const session = require('express-session');
 const flash = require('connect-flash');
 const bodyParser = require('body-parser');
-const validator = require('express-validator');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 
 require('console-stamp')(console, '[HH:MM:ss.l]');
 
+const config = require('./src/js/config/config');
 
 const app = express();
 app.set('view engine', 'pug');
@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 app.use(express.static('src/public'));
-app.use(session({secret: 'foobar', resave: false, saveUninitialized: true}));
+app.use(session({secret: config.session.secret, resave: false, saveUninitialized: true}));
 app.use(function(req, res, next) {
     res.locals.session = req.session;
     next();
@@ -27,7 +27,9 @@ app.use(flash());
 app.use(morgan('combined'));
 
 //MongoDB setup
-mongoose.connect('mongodb://localhost:27017/feedback_loop', {useNewUrlParser: true, useFindAndModify: false})
+mongoose.connect('mongodb://' + config.db.user.name + ':' + config.db.user.password + '@' +
+                config.db.url.server + ':' + config.db.url.port + '/' + 
+                config.db.name, {useNewUrlParser: true, useFindAndModify: false})
     .catch(error => {
         console.error(error);
         process.exit(1);
@@ -49,6 +51,6 @@ app.use('/', feedbackRoutes);
 app.use('/oops', oopsRoutes);
 app.use('/success', successRoutes);
 
-app.listen(3000, () => {
-    console.log('Listening on port ' + 3000);
+app.listen(config.app.port, () => {
+    console.log('Listening on port ' + config.app.port);
 });
